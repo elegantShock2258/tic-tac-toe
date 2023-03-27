@@ -6,7 +6,7 @@
   gap:10px;
 }
 
-.square-light {
+.square-light ,.square-winning,.square-X,.square-O{
   border: 10px black solid;
   border-radius: 25px;
   width: 20vw;
@@ -15,20 +15,22 @@
   background-color:rgba(219, 151, 61, 0.767);
   
   font-size: 10em;
+  font-weight: bold;
   color:rgb(46, 54, 46);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-#winning{
+.square-winning{
   color: rgb(29, 175, 29);
-  background-color:rgba(172, 255, 47, 0.479);
+  background-color:rgb(163, 50, 50);
 }
-#X{
-  background-color: rgba(89, 255, 200, 0.377);
+.square-X{
+border: 10px rgb(11, 111, 177) solid;
 }
-#O{
-  background-color: rgba(248, 171, 27, 0.514);
+.square-O{
+border: 10px rgb(206, 44, 44) solid;
 }

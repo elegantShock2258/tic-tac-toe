@@ -1,95 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css'
 
 let ThemeContext = 'light'
 let squareValue = "O"
+// 6 7 8
+// 3 4 5
+// 0 1 2
 
-let squares = []
-class Square extends React.Component {
-  constructor(props, context) {
-    super(props, context)
-    this.state = {
-      value: "",
-      theme: props.theme,
-      types: props.types,
-      num: props.num
-    };
-    squares.push(this)
-  }
-  win = (a, b, c, val) => {
-    if (val === "") return
-    console.log(`setting squares ${a},${b},${c} as winning squares for |${val}|`)
-    for (const e of [a, b, c]) {
-      squares[e].setState({ types: "winning" })
-    }
-    // play an animation where X/O wins
+function win(a, b, c, val) {
+  console.log(`${a} ${b} ${c} won!!`)
+  // play an animation where X/O wins
+  // change board to thier color
+}
 
-    // change board to thier color
-  }
-  calculateWinners = () => {
+function App() {
+  let [values, setValues] = useState(Array(9).fill(""))
+  let [themes, setThemes] = useState(Array(9).fill(ThemeContext))
+
+
+
+  function calculateWinners() {
+    // vert
     for (let i = 0; i < 3; i++) {
-      // if (i === 1 && squareValue[0] != "") {
-      //   if (squares[0].state.value === squares[4].state.value && squares[4].state.value === squares[8].state.value) {
-      //     console.log(`square 1 is not empty`)
-      //     this.win(0, 4, 8, squares[1].state.value)
-      //   }
-      // }
-      for (let j = 0; j < 3; j++) {
-        if (squares[3 * j + i].state.value === "") {
-          console.log(`square ${3 * j + i} is empty`)
-          continue;
-        } if (i === 1) {
-          console.log("checking horizontally")
-            console.log(squares[3 * j + i].state.value + " " + squares[3 * j + i + 1].state.value + " " + squares[3 * j + i + 2].state.value)
-          if (squares[3 * j + i].state.value === squares[3 * j + i + 1].state.value && squares[3 * j + i + 1].state.value === squares[3 * j + i + 2].state.value) {
-            this.win(3 * j + i, 3 * j + i + 1, 3 * j + i + 2, squares[3 * j + i].state.value)
-          }
-        } if (j === 1) {
-          console.log("checking vertically")
-          console.log(squares[3 * j + i].state.value + " " + squares[3 * j + i + 3].state.value + " " + squares[3 * j + i + 6].state.value)
-          if (squares[3 * j + i].state.value === squares[3 * (j + 1) + i].state.value && squares[3 * (j + 1) + i].state.value === squares[3 * (j + 2) + i].state.value) {
-            this.win(3 * j + i, 3 * (j + 1) + i, 3 * (j + 2) + i, squares[3 * j + i].state.value)
-          }
-        }
+      // console.log(`${values[3 * i]}, ${values[3 * i + 1]}, ${values[3 * i + 2]}`)
+      if (values[3 * i] != "" && values[3 * i] === values[3 * i + 1] && values[3 * i + 1] === values[3 * i + 2]) {
+        win(3 * i, 3 * i + 1, 3 * i + 2, values[3 * i])
+
       }
     }
+    // hor
+    for (let i = 0; i < 3; i++)
+      if (values[i] != "" && values[i] === values[3 + i] && values[3 + i] === values[6 + i])
+        win(i, 3 + i, 6 + i, values[i])
+    // dia
+
   }
 
-  onClickHandler = () => {
-    console.log("set square: ", this.state.num, this.state.value);
-    if (this.state.value === "") {
-      this.setState({ value: squareValue })
-      this.setState({ types: squareValue })
-      squareValue = (squareValue === "O") ? "X" : "O"
+  class Square extends React.Component {
 
+    constructor(props, context) {
+      super(props, context)
+      this.state = {
+        value: props.value,
+        num: props.num,
+        theme: props.theme
+      };
+    }
+    onClickHandler = () => {
+      if (this.state.value === "") {
+        this.setState({ value: squareValue })
+        values[this.state.num] = squareValue
+        setValues(values)
 
-      this.calculateWinners()
+        this.setState({ theme: squareValue })
+        themes[this.state.num] = squareValue
+        setThemes(themes)
+
+        console.log(values)
+        squareValue = (squareValue === "O") ? "X" : "O"
+      } else {
+        //play an animation where the box jiggles and it transitions to red and back
+      }
+    }
+
+    render() {
+      calculateWinners()
+      return (
+        <div className={"square-" + this.state.theme} onClick={this.onClickHandler}>
+          <p>{this.state.value}</p>
+        </div>
+      )
     }
   }
 
-  render() {
-    return (
-      <div className={"square-" + this.state.theme} id={this.state.types} onClick={this.onClickHandler}>
-        <p>{this.state.value}</p>
-      </div>
-    )
-  }
-}
-function App() {
 
   return (
     <div className="App">
-      <Square num={0} theme={ThemeContext} />
-      <Square num={1} theme={ThemeContext} />
-      <Square num={2} theme={ThemeContext} />
-      <Square num={3} theme={ThemeContext} />
-      <Square num={4} theme={ThemeContext} />
-      <Square num={5} theme={ThemeContext} />
-      <Square num={6} theme={ThemeContext} />
-      <Square num={7} theme={ThemeContext} />
-      <Square num={8} theme={ThemeContext} />
+      <Square num={0} value={values[0]} theme={themes[0]} />
+      <Square num={1} value={values[1]} theme={themes[1]} />
+      <Square num={2} value={values[2]} theme={themes[2]} />
+      <Square num={3} value={values[3]} theme={themes[3]} />
+      <Square num={4} value={values[4]} theme={themes[4]} />
+      <Square num={5} value={values[5]} theme={themes[5]} />
+      <Square num={6} value={values[6]} theme={themes[6]} />
+      <Square num={7} value={values[7]} theme={themes[7]} />
+      <Square num={8} value={values[8]} theme={themes[8]} />
     </div>
   );
-}
 
+
+}
 export default App;
