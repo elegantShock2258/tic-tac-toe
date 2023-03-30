@@ -9,7 +9,7 @@
 .square-light ,.square-winning,.square-X,.square-O{
   border: 10px black solid;
   border-radius: 25px;
-  width: 20vw;
+  width: 20vh;
   height: 20vh;
   box-sizing:border-box;
   background-color:rgba(219, 151, 61, 0.767);
@@ -26,7 +26,6 @@
 
 .square-winning{
   color: rgb(29, 175, 29);
-  background-color:rgb(163, 50, 50);
 }
 .square-X{
 border: 10px rgb(11, 111, 177) solid;
